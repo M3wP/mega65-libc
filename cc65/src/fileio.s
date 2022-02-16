@@ -1,12 +1,12 @@
 
-	.setcpu "65C02"
+;	.setcpu "65C02"
 	.export _closeall, _open, _close, _read512, _toggle_rom_write_protect, _chdir, _chdirroot
 
 	.include "zeropage.inc"
 	
 .SEGMENT "CODE"
 
-	.p4510
+;	.p4510
 
 mega65_io_enable:
 	lda #$47
@@ -17,30 +17,35 @@ mega65_io_enable:
 	
 cc65_args_read_ptr1_16:	
         ;; sp here is the ca65 sp ZP variable, not the stack pointer of a 4510
-        .p02
+;        .p02
 	
         lda (sp),y
         sta ptr1
         iny
         lda (sp),y
-        .p4510
+;        .p4510
         sta ptr1+1
 	iny
 	rts
         
 cc65_args_read_tmp1_8:	
         ;; sp here is the ca65 sp ZP variable, not the stack pointer of a 4510
-        .p02
+;        .p02
         lda (sp),y
         sta tmp1
         iny
-        .p4510
+;        .p4510
 	rts
         
 
 cc65_copy_ptr1_string_to_0100:	
         ;; Copy file name
-	phy
+		
+;		phy
+		
+		TYA
+		PHA
+
         ldy #0
 @NameCopyLoop:
         lda (ptr1),y
@@ -48,8 +53,13 @@ cc65_copy_ptr1_string_to_0100:
         iny
         cmp #0
         bne @NameCopyLoop
-	ply
-	rts	
+	
+	
+;		ply
+		PLA	
+		TAY
+
+		rts	
 
 setname_0100:
         ;;  Call dos_setname()
@@ -106,9 +116,12 @@ _read512:
 	sty tmp3
 
 	;; Make sure SD buffer is selected, not FDC buffer
-	lda #$80
-	tsb $D689
-	
+;	lda #$80
+;	tsb $D689
+	LDA	$D689
+	ORA	#$80
+	STA	$D689	
+
 	;; Copy the full 512 bytes from the sector buffer at $FFD6E00
 	;; (This saves the need to mess with mapping/unmapping the sector
 	;; buffer).

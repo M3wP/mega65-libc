@@ -20,8 +20,8 @@
 
 #define __fastcall__ // to silence stupid vscode warning
 
-#include <fcio.h>
-#include <memory.h>
+#include "fcio.h"
+#include "memory.h"
 #include <c64.h>
 #include <cbm.h>
 #include <stdarg.h>
@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include "time.h"
 #include <stdbool.h>
 
 #define MAX_FCI_BLOCKS 16
@@ -239,7 +239,7 @@ void fc_underline(byte f)
         bitclear(gCurrentWin->extAttributes, 7);
 }
 
-void fc_resetPalette()
+void fc_resetPalette(void)
 {
     mega65_io_enable();
     fc_loadPalette(gFcioConfig->reservedPaletteBase, 255, false);
@@ -430,7 +430,7 @@ void fc_screenmode(byte h640, byte v400, byte rows)
     fc_clrscr();
 }
 
-void fc_go8bit()
+void fc_go8bit(void)
 {
     mega65_io_enable();
     VIC3CTRL = 96;    // quit bitplane mode if set
@@ -679,7 +679,7 @@ fciInfo *fc_displayFCIFile(char *filename, byte x0, byte y0)
     return info;
 }
 
-void fc_scrollUp()
+void fc_scrollUp(void)
 {
     static byte y;
     long bas0, bas1;
@@ -695,7 +695,7 @@ void fc_scrollUp()
     fc_line(0, gCurrentWin->height - 1, gCurrentWin->width, 32, gCurrentWin->textcolor);
 }
 
-void fc_scrollDown()
+void fc_scrollDown(void)
 {
     signed char y;
     long bas0, bas1;
@@ -713,7 +713,7 @@ void fc_scrollDown()
     fc_line(0, 0, gCurrentWin->width, 32, gCurrentWin->textcolor);
 }
 
-void cr()
+void cr(void)
 {
     gCurrentWin->xc = 0;
     gCurrentWin->yc++;
@@ -734,9 +734,13 @@ void fc_plotPetsciiChar(byte x, byte y, byte c, byte color, byte exAttr)
     lpoke(gFcioConfig->colourBase + adrOffset, 0);
 }
 
-byte fc_wherex() { return gCurrentWin->xc; }
+byte fc_wherex(void) { 
+	return gCurrentWin->xc; 
+}
 
-byte fc_wherey() { return gCurrentWin->yc; }
+byte fc_wherey(void) { 
+	return gCurrentWin->yc; 
+}
 
 void fc_setAutoCR(bool a)
 {
@@ -865,7 +869,7 @@ void fc_clrscr()
     fc_gotoxy(0, 0);
 }
 
-void fc_resetwin()
+void fc_resetwin(void)
 {
     gCurrentWin = defaultWin;
     gCurrentWin->x0 = 0;

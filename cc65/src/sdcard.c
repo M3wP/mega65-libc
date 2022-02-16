@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <sdcard.h>
-#include <hal.h>
-#include <memory.h>
+#include "sdcard.h"
+#include "hal.h"
+#include "memory.h"
 
 uint8_t sector_buffer[512];
 
-#define POKE(X,Y) (*(unsigned char*)(X))=Y
-#define PEEK(X) (*(unsigned char*)(X))
+//#define POKE(X,Y) (*(unsigned char*)(X))=Y
+//#define PEEK(X) (*(unsigned char*)(X))
 
 const long sd_sectorbuffer=0xffd6e00L;
 const uint16_t sd_ctl=0xd680L;
@@ -45,10 +45,10 @@ void mega65_sdcard_reset(void)
   }
 }
 
-void mega65_fast(void)
-{
-  POKE(0,65);
-}
+// void mega65_fast(void)
+// {
+//   POKE(0,65);
+// }
 
 uint32_t mega65_sdcard_getsize(void)
 {
@@ -451,4 +451,39 @@ void mega65_sdcard_erase(const uint32_t first_sector,const uint32_t last_sector)
   while (PEEK(sd_ctl)&3) continue;
 #endif    
   
+}
+
+
+void sdcard_writenextsector(void)
+{
+  // Copy data to hardware sector buffer via DMA
+  lcopy((long)sector_buffer, sd_sectorbuffer, 512);
+
+  // Command write of follow-on block in multi-block write job
+  while (PEEK(sd_ctl) & 3) {
+    continue;
+  }
+  POKE(sd_ctl, 0x57); // Open SD card write gate
+  POKE(sd_ctl, 5);
+  while (!(PEEK(sd_ctl) & 3)) {
+    continue;
+  }
+  while (PEEK(sd_ctl) & 3) {
+    continue;
+  }
+}
+
+void sdcard_writemultidone(void)
+{
+  while (PEEK(sd_ctl) & 3) {
+    continue;
+  }
+  POKE(sd_ctl, 0x57);
+  POKE(sd_ctl, 6);
+  while (!(PEEK(sd_ctl) & 3)) {
+    continue;
+  }
+  while (PEEK(sd_ctl) & 3) {
+    continue;
+  }
 }

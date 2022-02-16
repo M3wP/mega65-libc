@@ -1,10 +1,10 @@
 
-	.setcpu "65C02"
-	.export _opendir, _readdir, _closedir	
+;	.setcpu "4510"
+	.export _opendir, _readdir, _closedir;, _closeall
 	
 .SEGMENT "CODE"
 
-	.p4510
+;	.p4510
 	
 	;; closedir takes file descriptor as argument (appears in A)
 _closedir:
@@ -48,7 +48,11 @@ _readdir:
 	;; Third, call the hypervisor trap
 	;; File descriptor gets passed in in X.
 	;; Result gets written to transfer area we setup at $0400
-	plx
+
+;	plx
+	pla
+	tax
+
 	ldy #>$0400 		; write dirent to $0400 
 	lda #$14
 	STA $D640
@@ -100,6 +104,19 @@ _readdir:
 	ldx #>_readdir_dirent
 	
 	RTS
+
+
+
+; _closeall:
+; 	; close all files to work around hyppo file descriptor leak bug
+;         lda #$22
+;         sta $d640
+;         nop
+
+; 	rts
+
+
+.data
 
 _readdir_dirent:
 	.dword 0   		; d_ino

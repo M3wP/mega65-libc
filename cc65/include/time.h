@@ -4,8 +4,8 @@
   The RTC varies between revisions of the MEGA65, though, so we have to take that into account.
 */
 
-#ifndef _TIME_H_
-#define _TIME_H_
+#ifndef __MEGA65LIB_TIME_H__
+#define __MEGA65LIB_TIME_H__
 
 struct m65_tm {
   unsigned char tm_sec;    /* Seconds (0-60) */
@@ -19,7 +19,7 @@ struct m65_tm {
   unsigned char tm_isdst;  /* Daylight saving time */
 };
 
-void getrtc(struct m65_tm *tm);
-void setrtc(struct m65_tm *tm);
+extern void getrtc(struct m65_tm *tm);
+extern void setrtc(struct m65_tm *tm);
 
 #endif

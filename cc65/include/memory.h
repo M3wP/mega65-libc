@@ -1,5 +1,5 @@
-#ifndef __MEGA65_MEMORY_H
-#define __MEGA65_MEMORY_H
+#ifndef __MEGA65LIB_MEMORY_H__
+#define __MEGA65LIB_MEMORY_H__
 
 struct dmagic_dmalist
 {
@@ -27,16 +27,22 @@ struct dmagic_dmalist
 extern struct dmagic_dmalist dmalist;
 extern unsigned char dma_byte;
 
-void mega65_io_enable(void);
-unsigned char lpeek(long address);
-unsigned char lpeek_debounced(long address);
-void lpoke(long address, unsigned char value);
-void lcopy(long source_address, long destination_address,
+extern void mega65_io_enable(void);
+extern unsigned char lpeek(long address);
+extern unsigned char lpeek_debounced(long address);
+extern void lpoke(long address, unsigned char value);
+extern void lcopy(long source_address, long destination_address,
            unsigned int count);
-void lfill(long destination_address, unsigned char value,
+extern void lfill(long destination_address, unsigned char value,
            unsigned int count);
-void lfill_skip(long destination_address, unsigned char value,
+extern void lfill_skip(long destination_address, unsigned char value,
                 unsigned int count, unsigned char skip);
+
+//extern void lcopy_safe(unsigned long src, unsigned long dst, unsigned int count);
+extern unsigned char lpeek_debounced(long address);
+
+
+
 #ifdef __CC65__
 #define POKE(X, Y) (*(unsigned char *)(X)) = Y
 #define PEEK(X) (*(unsigned char *)(X))

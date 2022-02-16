@@ -1,5 +1,5 @@
-#ifndef _TARGETS_H_
-#define _TARGETS_H_
+#ifndef __MEGA65LIB_TARGETS_H__
+#define __MEGA65LIB_TARGETS_H__
 
 #define TARGET_UNKNOWN 0
 #define TARGET_MEGA65R1 1
@@ -12,6 +12,6 @@
 #define TARGET_WUKONG 0xFD
 #define TARGET_SIMULATION 0xFE
 
-unsigned char detect_target(void);
+extern unsigned char detect_target(void);
 
 #endif

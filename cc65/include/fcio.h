@@ -5,10 +5,10 @@
     Details.
 */
 
-#ifndef __FCIO
-#define __FCIO
+#ifndef __MEGA65LIB_FCIO_H__
+#define __MEGA65LIB_FCIO_H__
 
-#include <memory.h>
+#include "memory.h"
 #include <stdbool.h>
 
 #define FCBUFSIZE 0xff
@@ -106,13 +106,13 @@ void fc_init(byte h640, byte v400, fcioConf *config, byte rows, char *reservedBi
  * @param v400 vertical resolution; true: 400px, false: 200px
  * @param rows character rows (or 0 for standard configuration)
  */
-void fc_screenmode(byte h640, byte v400, byte rows);
+extern void fc_screenmode(byte h640, byte v400, byte rows);
 
 /**
  * @brief fall back to 8 bit screen mode
  * 
  */
-void fc_go8bit();
+extern void fc_go8bit(void);
 
 /**
  * @brief display fatal error message and stop execution
@@ -120,7 +120,7 @@ void fc_go8bit();
  * @param format printf-style format string
  * @param ... format string parameters
  */
-void fc_fatal(const char *format, ...);
+extern void fc_fatal(const char *format, ...);
 
 // ----------------------------------------------------------------------------
 // lines and blocks
@@ -136,7 +136,7 @@ void fc_fatal(const char *format, ...);
  * @param character ascii character to plot
  * @param col colour to plot
  */
-void fc_block(byte x0, byte y0, byte width, byte height, byte character, byte col);
+extern void fc_block(byte x0, byte y0, byte width, byte height, byte character, byte col);
 
 /**
  * @brief draw a horizontal line using extended (==fcm bitmap) characters
@@ -146,7 +146,7 @@ void fc_block(byte x0, byte y0, byte width, byte height, byte character, byte co
  * @param width width
  * @param lineChar bitmap character index to use
  */
-void fc_hlinexy(byte x, byte y, byte width, byte lineChar);
+extern void fc_hlinexy(byte x, byte y, byte width, byte lineChar);
 
 /**
  * @brief draw a vertical line using extended (==fcm bitmap) characters
@@ -156,17 +156,17 @@ void fc_hlinexy(byte x, byte y, byte width, byte lineChar);
  * @param height height
  * @param lineChar bitmap character index to use
  */
-void fc_vlinexy(byte x, byte y, byte height, byte lineChar);
-void fc_line(byte x, byte y, byte width, byte character, byte col);
+extern void fc_vlinexy(byte x, byte y, byte height, byte lineChar);
+extern void fc_line(byte x, byte y, byte width, byte character, byte col);
 
 // ----------------------------------------------------------------------------
 // --- keyboard input ---
 // ----------------------------------------------------------------------------
 
-void fc_emptyBuffer(void);
-unsigned char fc_cgetc(void);
-char fc_getkey(void);
-char fc_getkeyP(byte x, byte y, const char *prompt);
+extern void fc_emptyBuffer(void);
+extern unsigned char fc_cgetc(void);
+extern char fc_getkey(void);
+extern char fc_getkeyP(byte x, byte y, const char *prompt);
 
 /**
  * @brief get user input
@@ -174,8 +174,8 @@ char fc_getkeyP(byte x, byte y, const char *prompt);
  * @param maxlen maximum length
  * @return char* a newly allocated area in memory containing the input string
  */
-char *fc_input(byte maxlen);
-int fc_getnum(byte maxlen);
+extern char *fc_input(byte maxlen);
+extern int fc_getnum(byte maxlen);
 
 // ----------------------------------------------------------------------------
 // --- string and character output ---
@@ -185,21 +185,21 @@ int fc_getnum(byte maxlen);
  * @brief clears the current text window
  * 
  */
-void fc_clrscr();
+extern void fc_clrscr(void);
 
 /**
  * @brief put character at current cursor position
  * 
  * @param c the character
  */
-void fc_putc(char c);
+extern void fc_putc(char c);
 
 /**
  * @brief put string at current cursor position
  * 
  * @param s the string
  */
-void fc_puts(const char *s);
+extern void fc_puts(const char *s);
 
 /**
  * @brief put string at given position in current window
@@ -208,7 +208,7 @@ void fc_puts(const char *s);
  * @param y 
  * @param s the string
  */
-void fc_putsxy(byte x, byte y, char *s);
+extern void fc_putsxy(byte x, byte y, char *s);
 
 /**
  * @brief put character at given position in current window
@@ -217,7 +217,7 @@ void fc_putsxy(byte x, byte y, char *s);
  * @param y 
  * @param c the character
  */
-void fc_putcxy(byte x, byte y, char c);
+extern void fc_putcxy(byte x, byte y, char c);
 
 /**
  * @brief print string at current cursor position
@@ -225,7 +225,7 @@ void fc_putcxy(byte x, byte y, char c);
  * @param format format string
  * @param ... format parameters
  */
-void fc_printf(const char *format, ...);
+extern void fc_printf(const char *format, ...);
 
 /**
  * @brief set cursor position in current window
@@ -233,28 +233,28 @@ void fc_printf(const char *format, ...);
  * @param x 
  * @param y 
  */
-void fc_gotoxy(byte x, byte y);
+extern void fc_gotoxy(byte x, byte y);
 
 /**
  * @brief get cursor x position
  * 
  * @return byte cursor y position
  */
-byte fc_wherex();
+extern byte fc_wherex(void);
 
 /**
  * @brief get cursor y position
  * 
  * @return byte cursor y position
  */
-byte fc_wherey();
+extern byte fc_wherey(void);
 
 /**
  * @brief set auto CR
  * 
  * @param a whether to automatically issue a CR when the text cursor reaches the right border
  */
-void fc_setAutoCR(bool a);
+extern void fc_setAutoCR(bool a);
 
 
 /**
@@ -262,7 +262,7 @@ void fc_setAutoCR(bool a);
  * 
  * @param aWin window to activate
  */
-void fc_setwin(textwin *aWin);
+extern void fc_setwin(textwin *aWin);
 
 /**
  * @brief convenience method to create a window structure
@@ -273,20 +273,20 @@ void fc_setwin(textwin *aWin);
  * @param height window height
  * @return textwin* the created window structure
  */
-textwin *fc_makeWin(byte x0, byte y0, byte width, byte height);
+extern textwin *fc_makeWin(byte x0, byte y0, byte width, byte height);
 
 /**
  * @brief reset text window to whole screen
  * 
  */
-void fc_resetwin();
+extern void fc_resetwin(void);
 
 /**
  * @brief cursor control
  * 
  * @param onoff 1=on, 0=off
  */
-void fc_cursor(byte onoff);
+extern void fc_cursor(byte onoff);
 
 /**
  * @brief center string at given position
@@ -296,19 +296,19 @@ void fc_cursor(byte onoff);
  * @param width width of area
  * @param text text to center
  */
-void fc_center(byte x, byte y, byte width, char *text);
+extern void fc_center(byte x, byte y, byte width, char *text);
 
 /**
  * @brief scrolls the content of the current window up
  * 
  */
-void fc_scrollUp();
+extern void fc_scrollUp(void);
 
 /**
  * @brief scrolls the contents of the current window down
  * 
  */
-void fc_scrollDown();
+extern void fc_scrollDown(void);
 
 // ----------------------------------------------------------------------------
 // colour, attributes and palette handling
@@ -319,28 +319,28 @@ void fc_scrollDown();
  * 
  * @param f reverse attribute flag
  */
-void fc_revers(byte f);
+extern void fc_revers(byte f);
 
 /**
  * @brief set or reset the flash attribute
  * 
  * @param f flash attribute flag
  */
-void fc_flash(byte f);
+extern void fc_flash(byte f);
 
 /**
  * @brief set or reset the bold attribute
  * 
  * @param f bold attribute flag
  */
-void fc_bold(byte f);
+extern void fc_bold(byte f);
 
 /**
  * @brief set or reset the underline attribute
  * 
  * @param f underline attribute flag
  */
-void fc_underline(byte f);
+extern void fc_underline(byte f);
 
 /**
  * @brief load palette data into the VIC
@@ -349,7 +349,7 @@ void fc_underline(byte f);
  * @param size size (in palette entries)
  * @param reservedSysPalette whether to overwrite colours 0-15
  */
-void fc_loadPalette(himemPtr adr, byte size, byte reservedSysPalette);
+extern void fc_loadPalette(himemPtr adr, byte size, byte reservedSysPalette);
 
 /**
  * @brief set palette entry
@@ -359,21 +359,21 @@ void fc_loadPalette(himemPtr adr, byte size, byte reservedSysPalette);
  * @param green green (0-255)
  * @param blue blue (0-255)
  */
-void fc_setPalette(int num, byte red, byte green, byte blue);
+extern void fc_setPalette(int num, byte red, byte green, byte blue);
 
 /**
  * @brief load FCI palette into the VIC
  * 
  * @param info pointer to FCI image info block
  */
-void fc_loadFCIPalette(fciInfo *info);
+extern void fc_loadFCIPalette(fciInfo *info);
 
 /**
  * @brief set palette entries to black
  * 
  * @param reservedSysPalette exclude colours 0-15
  */
-void fc_zeroPalette(byte reservedSysPalette);
+extern void fc_zeroPalette(byte reservedSysPalette);
 
 /**
  * @brief fade palette to or from the desired values
@@ -384,7 +384,7 @@ void fc_zeroPalette(byte reservedSysPalette);
  * @param steps number of steps for fade (max. 255)
  * @param fadeOut if true, fade out rather than in
  */
-void fc_fadePalette(himemPtr adr, byte size, byte reservedSysPalette, byte steps, bool fadeOut);
+extern void fc_fadePalette(himemPtr adr, byte size, byte reservedSysPalette, byte steps, bool fadeOut);
 
 /**
  * @brief reset palette to reserved FCI palette
@@ -392,14 +392,14 @@ void fc_fadePalette(himemPtr adr, byte size, byte reservedSysPalette, byte steps
  * If a reserved FCI is used (see @a fc_loadReservedFCI), reset the current
  * palette to the reserved one.
  */
-void fc_resetPalette();
+extern void fc_resetPalette(void);
 
 /**
  * @brief set text colour of current window
  * 
  * @param c text colour index
  */
-void fc_textcolor(byte c);
+extern void fc_textcolor(byte c);
 
 /**
  * @brief set border colour
@@ -421,7 +421,7 @@ void fc_textcolor(byte c);
  * @brief free automatically allocated graphic areas
  * 
  */
-void fc_freeGraphAreas(void);
+extern void fc_freeGraphAreas(void);
 
 /**
  * @brief Adds a graphics rectangle to the screen.
@@ -436,7 +436,7 @@ void fc_freeGraphAreas(void);
  * setting the palette (useful for fading in images after loading)
  * 
  */
-void fc_addGraphicsRect(byte x0, byte y0, byte width, byte height,
+extern void fc_addGraphicsRect(byte x0, byte y0, byte width, byte height,
                         himemPtr bitmapData);
 
 /**
@@ -458,7 +458,7 @@ void fc_addGraphicsRect(byte x0, byte y0, byte width, byte height,
  * @warning only loads the picture, doesn't display it!
  * 
  */
-fciInfo *fc_loadFCI(char *filename, himemPtr address, himemPtr paletteAddress);
+extern fciInfo *fc_loadFCI(char *filename, himemPtr address, himemPtr paletteAddress);
 
 /**
  * @brief display FCI image
@@ -468,7 +468,7 @@ fciInfo *fc_loadFCI(char *filename, himemPtr address, himemPtr paletteAddress);
  * @param y0 y origin (in characters)
  * @param setPalette also overwrites current palette with image palette if true
  */
-void fc_displayFCI(fciInfo *info, byte x0, byte y0, bool setPalette);
+extern void fc_displayFCI(fciInfo *info, byte x0, byte y0, bool setPalette);
 
 /**
  * @brief fade in FCI image
@@ -478,7 +478,7 @@ void fc_displayFCI(fciInfo *info, byte x0, byte y0, bool setPalette);
  * @param y0 y origin (in characters)
  * @param steps number of steps for fade (255=max)
  */
-void fc_fadeFCI(fciInfo *info, byte x0, byte y0, byte steps);
+extern void fc_fadeFCI(fciInfo *info, byte x0, byte y0, byte steps);
 
 /**
  * @brief load FCI file and display it
@@ -488,7 +488,7 @@ void fc_fadeFCI(fciInfo *info, byte x0, byte y0, byte steps);
  * @param y0 origin y
  * @return fciInfo* associated fciInfo block for file
  */
-fciInfo *fc_displayFCIFile(char *filename, byte x0, byte y0);
+extern fciInfo *fc_displayFCIFile(char *filename, byte x0, byte y0);
 
 /**
  * @brief plot extended (==full colour) character
@@ -497,7 +497,7 @@ fciInfo *fc_displayFCIFile(char *filename, byte x0, byte y0);
  * @param y screen row
  * @param c character index
  */
-void fc_plotExtChar(byte x, byte y, byte c);
+extern void fc_plotExtChar(byte x, byte y, byte c);
 
 /**
  * @brief plot petscii character
@@ -508,7 +508,7 @@ void fc_plotExtChar(byte x, byte y, byte c);
  * @param color character colour
  * @param exAttr extended attributes
  */
-void fc_plotPetsciiChar(byte x, byte y, byte c, byte color, byte exAttr);
+extern void fc_plotPetsciiChar(byte x, byte y, byte c, byte color, byte exAttr);
 
 
 #endif

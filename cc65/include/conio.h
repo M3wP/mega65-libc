@@ -52,8 +52,8 @@
 
 */
 
-#ifndef M65LIBC_CONIO_H
-#define M65LIBC_CONIO_H
+#ifndef __MEGA65LIB_CONIO_H__
+#define __MEGA65LIB_CONIO_H__
 
 /*------------------------------------------------------------------------
   Color and attributes
@@ -188,10 +188,10 @@ typedef struct tagRECT
     \m65libsyntax    {void conioinit(void)}
     \m65libremarks{This must be called before using any conio library function.}
 */
-void conioinit(void);
+extern void conioinit(void);
 
-void setlowercase(void);
-void setuppercase(void);
+extern void setlowercase(void);
+extern void setuppercase(void);
 
 /** \m65libsummary{setscreenaddr}{Sets the screen RAM start address}
     \m65libsyntax    {void setscreenaddr(long addr);}
@@ -202,39 +202,39 @@ void setuppercase(void);
     }
     \m65libremarks{No bounds check is performed on the selected address}
 */
-void setscreenaddr(long addr);
+extern void setscreenaddr(long addr);
 
 /** \m65libsummary{getscreenaddr}{Returns the screen RAM start address}
     \m65libsyntax    {long getscreenaddr(void);}
     \m65libretval    {The current screen RAM address start address.}
 */
-long getscreenaddr(void);
+extern long getscreenaddr(void);
 
 /** \m65libsummary{setcolramoffset}{Sets the color RAM start offset value}
     \m65libsyntax    {void setcolramoffset(long offset);}
     \m65libparam     {addr}{The offset from the beginning of the color RAM address ($FF80000)}
     \m65libremarks{No bounds check is performed on the resulting address. Do not exceed the available Color RAM size}
 */
-void setcolramoffset(unsigned int addr);
+extern void setcolramoffset(unsigned int addr);
 
 /** \m65libsummary{getcolramoffset}{Returns the color RAM start offset value}
     \m65libsyntax    {long getscreenaddr(void);}
     \m65libretval    {The current color RAM start offset value.}
 */
-unsigned int getcolramoffset(void);
+extern unsigned int getcolramoffset(void);
 
 /** \m65libsummary{setcharsetaddr}{Sets the character set start address}
     \m65libsyntax    {void setcharsetaddr(long addr);}
     \m65libparam     {addr}{The address to set as start of character set}
     \m65libremarks   {No bounds check is performed on the selected address}
 */
-void setcharsetaddr(long addr);
+extern void setcharsetaddr(long addr);
 
 /** \m65libsummary{getcharsetaddr}{Returns the current character set start address}
     \m65libsyntax    {long getscreenaddr(void);}
     \m65libretval    {The current character set start address.}
 */
-long getcharsetaddr(void);
+extern long getcharsetaddr(void);
 
 /** 
     \m65libsummary{clrscr}{Clear the text screen. }
@@ -246,14 +246,14 @@ long getcharsetaddr(void);
     }
     \m65libremarks{Color RAM will be cleared with current text color}
 */
-void clrscr(void); 
+extern void clrscr(void); 
 
 /** \m65libsummary{getscreensize}{Returns the dimensions of the text screen}
     \m65libsyntax    {void getscreensize(unsigned char* width, unsigned char* height)}
     \m65libparam     {width}{Pointer to location where width will be returned}
     \m65libparam     {height}{Pointer to location where height will be returned}    
 */
-void fastcall getscreensize(unsigned char* width, unsigned char* height);
+extern void fastcall getscreensize(unsigned char* width, unsigned char* height);
 
 /** \m65libsummary{setscreensize}{Sets the dimensions of the text screen}
     \m65libsyntax    {void setscreensize(unsigned char width, unsigned char height)}
@@ -261,45 +261,45 @@ void fastcall getscreensize(unsigned char* width, unsigned char* height);
     \m65libparam     {height}{The height in rows (25 or 50)}
     \m65libremarks   {Currently only 40/80 and 25/50 are accepted. Other values are ignored.}
 */
-void fastcall setscreensize(unsigned char width, unsigned char height);
+extern void fastcall setscreensize(unsigned char width, unsigned char height);
 
 /** \m65libsummary{set16bitcharmode}{Sets or clear the 16-bit character mode}
     \m65libsyntax    {void set16bitcharmode(unsigned char f)}
     \m65libparam     {f}{Set true to set the 16-bit character mode}
     \m65libremarks   {This will trigger a video parameter reset if HOTREG is ENABLED. See sethotregs function.}
 */
-void fastcall set16bitcharmode(unsigned char f);
+extern void fastcall set16bitcharmode(unsigned char f);
 
 /** \m65libsummary{sethotregs}{Sets or clear the hot-register behavior of the VIC-IV chip.}
     \m65libsyntax    {void set16bitcharmode(unsigned char f)}
     \m65libparam     {f}{Set true to enable the hotreg behavior}
     \m65libremarks   {When this mode is ENABLED a video mode reset will be triggered when touching $D011, $D016, $D018, $D031 or the VIC-II bank bits of $DD00. }
 */
-void fastcall sethotregs(unsigned char f);
+extern void fastcall sethotregs(unsigned char f);
 
 
 /** \m65libsummary{setextendedattrib}{Sets or clear the VIC-III extended attributes mode to support blink, underline, bold and highlight.}
     \m65libsyntax    {void setextendedattrib(unsigned char f)}
     \m65libparam     {f}{Set true to set the extended attributes mode}
 */
-void fastcall setextendedattrib(unsigned char f);
+extern void fastcall setextendedattrib(unsigned char f);
 
 /** \m65libsummary{togglecase}{Set lower case character set}
     \m65libsyntax    {void setlowercase(void)}    
 */
-void fastcall setlowercase(void);
+extern void fastcall setlowercase(void);
 
 /** \m65libsummary{togglecase}{Set upper case character set}
     \m65libsyntax    {void setuppercase(void)}    
 */
-void fastcall setuppercase(void);
+extern void fastcall setuppercase(void);
 
 
 
 /** \m65libsummary{togglecase}{Toggle the current character set case}
     \m65libsyntax    {void togglecase(void)}    
 */
-void fastcall togglecase(void);
+extern void fastcall togglecase(void);
 
 /*------------------------------------------------------------------------
   Color and Attributes
@@ -309,61 +309,61 @@ void fastcall togglecase(void);
     \m65libsyntax    {void bordercolor(unsigned char c)}    
     \m65libparam     {c}{The color to set}
 */
-void fastcall bordercolor(unsigned char c);
+extern void fastcall bordercolor(unsigned char c);
 
 /** \m65libsummary{bgcolor}{Sets the current screen (background) color}
     \m65libsyntax    {void bgcolor(unsigned char c)}    
     \m65libparam     {c}{The color to set}
 */
-void fastcall bgcolor(unsigned char c);
+extern void fastcall bgcolor(unsigned char c);
 
 /** \m65libsummary{textcolor}{Sets the current text color}
     \m65libsyntax    {void textcolor(unsigned char c)}    
     \m65libparam     {c}{The color to set}
     \m65libremarks   {This function preserves attributes in the upper 4-bits if extended attributes are enabled. See setextendedattrib. }
 */
-void fastcall textcolor(unsigned char c);
+extern void fastcall textcolor(unsigned char c);
 
 /** \m65libsummary{revers}{Enable the reverse attribute}
     \m65libsyntax    {void revers(unsigned char c)}    
     \m65libparam     {enable}{0 to disable, 1 to enable}
     \m65libremarks   {Extended attributes mode must be active. See setextendedattrib.}
 */
-void fastcall revers(unsigned char enable);
+extern void fastcall revers(unsigned char enable);
 
 /** \m65libsummary{highlight}{Enable the highlight attribute}
     \m65libsyntax    {void highlight(unsigned char c)}    
     \m65libparam     {enable}{0 to disable, 1 to enable}
     \m65libremarks   {Extended attributes mode must be active. See setextendedattrib.}
 */
-void fastcall highlight(unsigned char enable);
+extern void fastcall highlight(unsigned char enable);
 
 /** \m65libsummary{blink}{Enable the blink attribute}
     \m65libsyntax    {void blink(unsigned char c)}    
     \m65libparam     {enable}{0 to disable, 1 to enable}
     \m65libremarks   {Extended attributes mode must be active. See setextendedattrib.}
 */
-void fastcall blink(unsigned char enable);
+extern void fastcall blink(unsigned char enable);
 
 /** \m65libsummary{underline}{Enable the underline attribute}
     \m65libsyntax    {void underline(unsigned char c)}  
     \m65libparam     {enable}{0 to disable, 1 to enable}  
     \m65libremarks   {Extended attributes mode must be active. See setextendedattrib.}
 */
-void fastcall underline(unsigned char enable);
+extern void fastcall underline(unsigned char enable);
 
 /** \m65libsummary{altpal}{Enable the alternate-palette attribute}
     \m65libsyntax    {void altpal(unsigned char c)}  
     \m65libparam     {enable}{0 to disable, 1 to enable}  
     \m65libremarks   {Extended attributes mode must be active. See setextendedattrib.}
 */
-void fastcall altpal(unsigned char enable);
+extern void fastcall altpal(unsigned char enable);
 
 /** \m65libsummary{clearattr}{Clear all text attributes}
     \m65libsyntax    {void clearattr())}  
     \m65libremarks   {Extended attributes mode must be active. See setextendedattrib.}
 */
-void fastcall clearattr(void);
+extern void fastcall clearattr(void);
 
 /** \m65libsummary{cellcolor}{Sets the color of a character cell}
     \m65libsyntax    {void cellcolor(unsigned char x, unsigned char y, unsigned char c)}   
@@ -372,7 +372,7 @@ void fastcall clearattr(void);
     \m65libparam     {c}{The color to set} 
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void cellcolor(unsigned char x, unsigned char y, unsigned char c);
+extern void cellcolor(unsigned char x, unsigned char y, unsigned char c);
 
 /*------------------------------------------------------------------------
   Palette management
@@ -382,39 +382,39 @@ void cellcolor(unsigned char x, unsigned char y, unsigned char c);
     \m65libparam     {bank}{The palette bank to set. Valid values are 0, 1, 2 or 3.}  
     \m65libremarks   {Use setpalbanka to set alternate text/bitmap palette}
 */
-void fastcall setpalbank(unsigned char bank);
+extern void fastcall setpalbank(unsigned char bank);
 
 /** \m65libsummary{setpalbanka}{Set alternate text/bitmap palette bank.}
     \m65libsyntax    {void setpalbanka(unsigned char bank)}  
     \m65libparam     {bank}{The palette bank to set. Valid values are 0, 1, 2 or 3.}  
     \m65libremarks   {Use setpalbank to set main text/bitmap palette}
 */
-void fastcall setpalbanka(unsigned char bank);
+extern void fastcall setpalbanka(unsigned char bank);
 
 /** \m65libsummary{getpalbank}{Get selected text/bitmap palette bank.}
     \m65libsyntax    {unsigned char getpalbank(void)}  
     \m65libremarks   {Use getpalbanka to get alternate text/bitmap selected palette}
     \m65libretval    {The current selected main text/bitmap palette bank.}
 */
-unsigned char getpalbank(void);
+extern unsigned char getpalbank(void);
 
 /** \m65libsummary{getpalbanka}{Get selected alternate text/bitmap palette bank.}
     \m65libsyntax    {unsigned char getpalbanka(void)}  
     \m65libremarks   {Use getpalbank to get main text/bitmap selected palette}
     \m65libretval    {The current selected alternate text/bitmap palette bank.}
 */
-unsigned char getpalbanka(void);
+extern unsigned char getpalbanka(void);
 
 /** \m65libsummary{setmapedpal}{Set maped-in palette bank at $D100-$D3FF.}
     \m65libsyntax    {void setmapedpal(unsigned char bank)}  
     \m65libparam     {bank}{The palette bank to map-in. Valid values are 0, 1, 2 or 3.}  
 */
-void fastcall setmapedpal(unsigned char bank);
+extern void fastcall setmapedpal(unsigned char bank);
 
 /** \m65libsummary{getmapedpal}{Get maped-in  palette bank at $D100-$D3FF.}
     \m65libsyntax    {unsigned char getmapedpal(void)}  
 */
-unsigned char getmapedpal(void);
+extern unsigned char getmapedpal(void);
 
 /** \m65libsummary{setpalentry}{Set color entry for the maped-in palette}
     \m65libsyntax    {void setpalentry(unsigned char c, unsigned char r, unsigned char g, unsigned char b)}  
@@ -424,7 +424,7 @@ unsigned char getmapedpal(void);
     \m65libparam     {b}{The blue component value}  
     \m65libremarks   {Use setmapedmal to bank-in the palette to modify}
 */
-void fastcall setpalentry(unsigned char c, unsigned char r, unsigned char g, unsigned char b);
+extern void fastcall setpalentry(unsigned char c, unsigned char r, unsigned char g, unsigned char b);
 
 /*------------------------------------------------------------------------
   Screen draw operations
@@ -437,7 +437,7 @@ void fastcall setpalentry(unsigned char c, unsigned char r, unsigned char g, uns
     \m65libparam     {col}{The color to fill} 
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void fillrect(const RECT *rc, unsigned char ch, unsigned char col);
+extern void fillrect(const RECT *rc, unsigned char ch, unsigned char col);
 
 /** \m65libsummary{box}{Draws a box with graphic characters}
     \m65libsyntax    {void box(const RECT *rc, unsigned char color, unsigned char style, unsigned char clear, unsigned char shadow)}   
@@ -448,7 +448,7 @@ void fillrect(const RECT *rc, unsigned char ch, unsigned char col);
     \m65libparam     {shadow}{Set to 1 to draw a drop shadow}
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void box(const RECT *rc, unsigned char color, unsigned char style, 
+extern void box(const RECT *rc, unsigned char color, unsigned char style, 
          unsigned char clear, unsigned char shadow);
 
 /** \m65libsummary{hline}{Draws an horizontal line.}
@@ -459,7 +459,7 @@ void box(const RECT *rc, unsigned char color, unsigned char style,
     \m65libparam     {style}{The style for the line. See HLINE_ constants for available styles. }
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void hline(unsigned char x, unsigned char y, unsigned char len, 
+extern void hline(unsigned char x, unsigned char y, unsigned char len, 
            unsigned char style);
 
 /** \m65libsummary{vline}{Draws a vertical line.}
@@ -470,7 +470,7 @@ void hline(unsigned char x, unsigned char y, unsigned char len,
     \m65libparam     {style}{The style for the line. See VLINE_ constants for available styles. }
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void vline(unsigned char x, unsigned char y, unsigned char len, 
+extern void vline(unsigned char x, unsigned char y, unsigned char len, 
            unsigned char style);
 
 /*------------------------------------------------------------------------
@@ -480,7 +480,7 @@ void vline(unsigned char x, unsigned char y, unsigned char len,
 /** \m65libsummary{gohome}{Set the current position at home (0,0 coordinate)}
     \m65libsyntax    {void gohome(void)}    
 */
-void fastcall gohome(void);
+extern void fastcall gohome(void);
 
 /** \m65libsummary{gotoxy}{Set the current position at X,Y coordinates}
     \m65libsyntax    {void gotoxy(unsigned char x, unsigned char y)}    
@@ -488,68 +488,68 @@ void fastcall gohome(void);
     \m65libparam     {y}{The new Y-coordinate} 
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void fastcall gotoxy(unsigned char x, unsigned char y);
+extern void fastcall gotoxy(unsigned char x, unsigned char y);
 
 /** \m65libsummary{gotox}{Set the current position X-coordinate}
     \m65libsyntax    {void gotox(unsigned char x)}    
     \m65libparam     {x}{The new X-coordinate} 
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void fastcall gotox(unsigned char x);
+extern void fastcall gotox(unsigned char x);
 
 /** \m65libsummary{gotoy}{Set the current position Y-coordinate}
     \m65libsyntax    {void gotoy(unsigned char y)}    
     \m65libparam     {y}{The new Y-coordinate} 
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void fastcall gotoy(unsigned char y);
+extern void fastcall gotoy(unsigned char y);
 
 /** \m65libsummary{moveup}{Move current position up}
     \m65libsyntax    {void moveup(unsigned char count)}    
     \m65libparam     {count}{The number of positions to move} 
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void fastcall moveup(unsigned char count);
+extern void fastcall moveup(unsigned char count);
 
 /** \m65libsummary{movedown}{Move current position down}
     \m65libsyntax    {void movedown(unsigned char count)}    
     \m65libparam     {count}{The number of positions to move} 
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void fastcall movedown(unsigned char count);
+extern void fastcall movedown(unsigned char count);
 
 /** \m65libsummary{moveleft}{Move current position left}
     \m65libsyntax    {void moveleft(unsigned char count)}    
     \m65libparam     {count}{The number of positions to move} 
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void fastcall moveleft(unsigned char count);
+extern void fastcall moveleft(unsigned char count);
 
 /** \m65libsummary{moveright}{Move current position right}
     \m65libsyntax    {void moveright(unsigned char count)}    
     \m65libparam     {count}{The number of positions to move} 
     \m65libremarks   {No screen bounds checks are performed; out of screen behavior is undefined }
 */
-void fastcall moveright(unsigned char count);
+extern void fastcall moveright(unsigned char count);
 
 /** \m65libsummary{wherex}{Return the current position X coordinate}
     \m65libsyntax    {unsigned char wherex(void)}    
     \m65libretval    {The current position X coordinate}
 */
-unsigned char wherex(void);
+extern unsigned char wherex(void);
 
 /** \m65libsummary{wherey}{Return the current position Y coordinate}
     \m65libsyntax    {unsigned char wherey(void)}    
     \m65libretval    {The current position Y coordinate}
 */
-unsigned char wherey(void);
+extern unsigned char wherey(void);
 
 /*------------------------------------------------------------------------
   PETSCII conversion output
   -----------------------------------------------------------------------*/
 
-char petsciitoscreencode(char c);
-char *petsciitoscreencode_s(char *s);
+extern char petsciitoscreencode(char c);
+extern char *petsciitoscreencode_s(char *s);
 
 /** \m65libsummary{pcputc}{Output a single petscii character to screen at current position}
     \m65libsyntax    {void cputc(unsigned char c)}
@@ -596,14 +596,14 @@ char *petsciitoscreencode_s(char *s);
     \m65libsyntax    {void cputc(unsigned char c)}
     \m65libparam     {c}{The screen code of the character to output}
 */
-void fastcall cputc(unsigned char c);
+extern void fastcall cputc(unsigned char c);
 
 /** \m65libsummary{cputnc}{Output N copies of a character at current position}
     \m65libsyntax    {void cputnc(unsigned char count, unsigned char c)}
     \m65libparam     {c}{The screen code of the characters to output}
     \m65libparam     {count}{The count of characters to print}
 */
-void fastcall cputnc(unsigned char count, unsigned char c);
+extern void fastcall cputnc(unsigned char count, unsigned char c);
 
 /** \m65libsummary{cputhex}{Output an hex-formatted number at current position}
     \m65libsyntax    {void cputhex(long n, unsigned char prec)}
@@ -611,7 +611,7 @@ void fastcall cputnc(unsigned char count, unsigned char c);
     \m65libparam     {prec}{The precision of the hex number, in digits. Leading zeros will be printed accordingly}    
     \m65libremarks   {The $ symbol will be automatically added at beginning of string}
 */
-void cputhex(long n, unsigned char prec);
+extern void cputhex(long n, unsigned char prec);
 
 /** \m65libsummary{cputdec}{Output a decimal number at current position}
     \m65libsyntax    {void cputdec(long n, unsigned char padding, unsigned char leadingZ)}
@@ -619,7 +619,7 @@ void cputhex(long n, unsigned char prec);
     \m65libparam     {padding}{The padding space to add before number}
     \m65libparam     {leadingZ}{The leading zeros to print}        
 */
-void cputdec(long n, unsigned char padding, unsigned char leadingZ);
+extern void cputdec(long n, unsigned char padding, unsigned char leadingZ);
 
 /** \m65libsummary{cputs}{Output screen codes at current position}
     \m65libsyntax    {void cputs(const unsigned char* s)}
@@ -627,7 +627,7 @@ void cputdec(long n, unsigned char padding, unsigned char leadingZ);
     \m65libremarks   {This function works with screen codes only. To output ordinary ASCII/PETSCII strings,
     use the "pcputs" macro. No pointer check is performed.  If s is null or invalid, behavior is undefined. }
 */
-void fastcall cputs(const unsigned char* s);
+extern void fastcall cputs(const unsigned char* s);
 
 /** \m65libsummary{cputsxy}{Output multiple screen codes at X,Y coordinates}
     \m65libsyntax    {void cputsxy (unsigned char x, unsigned char y, const unsigned char* s)}
@@ -637,7 +637,7 @@ void fastcall cputs(const unsigned char* s);
     \m65libremarks   {This function works with screen codes only. To output ordinary ASCII/PETSCII strings,
     use the "pcputsxy" macro. No pointer check is performed.  If s is null or invalid, behavior is undefined. }
 */
-void cputsxy (unsigned char x, unsigned char y, const unsigned char* s);
+extern void cputsxy (unsigned char x, unsigned char y, const unsigned char* s);
 
 /** \m65libsummary{cputcxy}{Output a single character at X,Y coordinates}
     \m65libsyntax    {void cputcxy (unsigned char x, unsigned char y, unsigned char c)}
@@ -645,7 +645,7 @@ void cputsxy (unsigned char x, unsigned char y, const unsigned char* s);
     \m65libparam     {y}{The Y coordinate where character will be printed}
     \m65libparam     {c}{The screen code of the character to print}
 */
-void cputcxy (unsigned char x, unsigned char y, unsigned char c);
+extern void cputcxy (unsigned char x, unsigned char y, unsigned char c);
 
 /** \m65libsummary{cputncxy}{Output N copies of a single character at X,Y coordinates}
     \m65libsyntax    {void cputncxy (unsigned char x, unsigned char y, unsigned char count, unsigned char c)}
@@ -654,11 +654,11 @@ void cputcxy (unsigned char x, unsigned char y, unsigned char c);
     \m65libparam     {count}{The number of characters to output}
     \m65libparam     {c}{The screen code of the characters to print}
 */
-void cputncxy (unsigned char x, unsigned char y, unsigned char count, unsigned char c);
+extern void cputncxy (unsigned char x, unsigned char y, unsigned char count, unsigned char c);
 
 // making raw _cprintf available here to be used by cprintf and pcprintf
 // don't use this call directly as it might go away in a future release  of the library
-unsigned char _cprintf(const unsigned char translateCodes, const unsigned char *fmt, ...);
+extern unsigned char _cprintf(const unsigned char translateCodes, const unsigned char *fmt, ...);
 
 /** \m65libsummary{cprintf}{Prints formatted output. \\
     Escape strings can be used to modify attributes, move cursor, etc similar to PRINT in CBM BASIC. 
@@ -721,14 +721,14 @@ unsigned char _cprintf(const unsigned char translateCodes, const unsigned char *
     \m65libretval    {The last character in the keyboard buffer }
     \m65libremarks   {Returned values are ASCII character codes}
 */
-unsigned char fastcall cgetc (void);
+extern unsigned char fastcall cgetc (void);
 
 /** \m65libsummary{kbhit}{ Returns the character in the keyboard buffer }
     \m65libsyntax    {unsigned char kbhit (void);}    
     \m65libretval    {The character code in the keyboard buffer,  0 otherwise. }
     \m65libremarks   {Returned values are ASCII character codes}
 */
-unsigned char fastcall kbhit (void);
+extern unsigned char fastcall kbhit (void);
 
 
 /** \m65libsummary{getkeymodstate}{ 
@@ -750,12 +750,12 @@ unsigned char fastcall kbhit (void);
     \end{tabular}        
     %>}
 */
-unsigned char getkeymodstate(void);
+extern unsigned char getkeymodstate(void);
 
 /** \m65libsummary{flushkeybuf}{Flush the keyboard buffer}
     \m65libsyntax    {void flushkeybuf(void)}    
 */
-void flushkeybuf(void);
+extern void flushkeybuf(void);
 
 /** \m65libsummary{cinput}{Get input from keyboard, printing incoming characters at current position.}
     \m65libsyntax    {unsigned char cinput(char* buffer, unsigned char buflen, unsigned char flags)}
@@ -780,7 +780,7 @@ void flushkeybuf(void);
    \m65libretval    {Count of successfully read characters in buffer}
 */
 
-unsigned char cinput(unsigned char* buffer, unsigned char buflen, unsigned char flags);
+extern unsigned char cinput(unsigned char* buffer, unsigned char buflen, unsigned char flags);
 
 
 

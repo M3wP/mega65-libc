@@ -1,5 +1,5 @@
-#ifndef TESTS_H
-#define TESTS_H
+#ifndef __MEGA65LIB_TESTS_H__
+#define __MEGA65LIB_TESTS_H__
 
 #define TEST_START 0xf0
 #define TEST_SKIP 0xf1
@@ -17,25 +17,25 @@
     \m65libparam     {sub}{The sub issue number (for multiple tests per issue)}
     \m65libparam     {status}{The test status to be sent}
 */
-void unit_test_report(unsigned short issue, unsigned char sub, unsigned char status);
+extern void unit_test_report(unsigned short issue, unsigned char sub, unsigned char status);
 
 /** \m65libsummary{unit_test_set_current_name}{Reports current test name to the host machine}
     \m65libsyntax    {void unit_test_set_current_name(char *name);}
     \m65libparam     {name}{The human-readable name of the current test}
 */
-void unit_test_set_current_name(char *name);
+extern void unit_test_set_current_name(char *name);
 
 /** \m65libsummary{unit_test_log}{Logs a message on the host machine}
     \m65libsyntax    {void unit_test_log(char *msg);}
     \m65libparam     {msg}{The message to be logged}
 */
-void unit_test_log(char *msg);
+extern void unit_test_log(char *msg);
 
 // convenience methods
-void unit_test_setup(char *testName, unsigned short issueNum);
-void unit_test_ok(void);
-void unit_test_fail(char *msg);
-void unit_test_done(void);
+extern void unit_test_setup(char *testName, unsigned short issueNum);
+extern void unit_test_ok(void);
+extern void unit_test_fail(char *msg);
+extern void unit_test_done(void);
 
 
 #endif
