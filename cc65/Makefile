@@ -18,16 +18,14 @@ MEGA65LIBCCFILES=	\
 		src/time.c
 
 MEGA65LIBASMFILES=	\
-		src/dirent.s\
-		src/dos.s\
 		src/fileio.s\
-		src/_sdcard.s
+		src/_sdcard.s\
+		src/_hal.s\
+		src/_memory.s
 
 MEGA65LIBHEADERFILES=	\
 		include/conio.h\
 		include/debug.h\
-		include/dirent.h\
-		include/dos.h\
 		include/fcio.h\
 		include/fileio.h\
 		include/hal.h\
@@ -66,6 +64,6 @@ $(MEGA65LIBASMFILES):
 ifeq ($(OS),Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
 else
 clean:		
-		rm	$(MEGA65LIBASMFILES:.s=.o) $(MEGA65LIBCCFILES:.c=.o) $(MEGA65LIBCCFILES:.c=.s)
+		rm	$(MEGA65LIBASMFILES:.s=.o) $(MEGA65LIBCCFILES:.c=.o) $(MEGA65LIBCCFILES:.c=.s) ./lib/libmega65.a
 
 endif

@@ -28,19 +28,25 @@ extern struct dmagic_dmalist dmalist;
 extern unsigned char dma_byte;
 
 extern void mega65_io_enable(void);
-extern unsigned char lpeek(long address);
-extern unsigned char lpeek_debounced(long address);
-extern void lpoke(long address, unsigned char value);
-extern void lcopy(long source_address, long destination_address,
+
+
+extern unsigned char lpeek(unsigned long address);
+extern unsigned char lpeek_debounced(unsigned long address);
+extern void lpoke(unsigned long address, unsigned char value);
+extern void lcopy(unsigned long source_address, unsigned long destination_address,
            unsigned int count);
-extern void lfill(long destination_address, unsigned char value,
+extern void lfill(unsigned long destination_address, unsigned char value,
            unsigned int count);
-extern void lfill_skip(long destination_address, unsigned char value,
+extern void lfill_skip(unsigned long destination_address, unsigned char value,
                 unsigned int count, unsigned char skip);
 
 //extern void lcopy_safe(unsigned long src, unsigned long dst, unsigned int count);
-extern unsigned char lpeek_debounced(long address);
+extern unsigned char lpeek_debounced(unsigned long address);
 
+extern void toggle_rom_write_protect();
+
+extern void fastcall mega65_save_zp(void);
+extern void fastcall mega65_restore_zp(void);
 
 
 #ifdef __CC65__

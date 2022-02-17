@@ -91,8 +91,8 @@ long mega65_sdcard_create_contiguous_file(char *name, long size,
   }
 
   // Commit sector to disk (in both copies of FAT)
-  mega65_sdcard_writesector(fat1_sector+fat_offset);
-  mega65_sdcard_writesector(fat2_sector+fat_offset);
+  mega65_sdcard_writesector(fat1_sector+fat_offset, 0);
+  mega65_sdcard_writesector(fat2_sector+fat_offset, 0);
   
   mega65_sdcard_readsector(root_dir_sector);
   
@@ -119,7 +119,7 @@ long mega65_sdcard_create_contiguous_file(char *name, long size,
   sector_buffer[offset+0x1E]=(size>>16L)&0xff; 
   sector_buffer[offset+0x1F]=(size>>24l)&0xff;
 
-  mega65_sdcard_writesector(root_dir_sector);
+  mega65_sdcard_writesector(root_dir_sector, 0);
 
   return root_dir_sector+(start_cluster-2)*8;
 }
@@ -369,8 +369,8 @@ unsigned long fat32_allocate_cluster(unsigned long cluster)
       // Found one
       r=fat_sector_num*128+(i>>2);
       *(unsigned long *)sector_buffer[i]=cluster;
-      mega65_sdcard_writesector(fat1_sector+fat_sector_num/*,0*/);
-      mega65_sdcard_writesector(fat2_sector+fat_sector_num/*,0*/);
+      mega65_sdcard_writesector(fat1_sector+fat_sector_num,0);
+      mega65_sdcard_writesector(fat2_sector+fat_sector_num,0);
       return r;
     }
   }

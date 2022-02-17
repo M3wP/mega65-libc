@@ -15,7 +15,7 @@ extern void mega65_sdcard_open(void);
 extern void mega65_sdcard_map_sector_buffer(void);
 extern void mega65_sdcard_unmap_sector_buffer(void);
 extern uint8_t mega65_sdcard_readsector(const uint32_t sector_number);
-extern uint8_t mega65_sdcard_writesector(const uint32_t sector_number);
+extern uint8_t mega65_sdcard_writesector(const uint32_t sector_number, uint8_t is_multi);
 extern void mega65_sdcard_erase(const uint32_t first_sector,const uint32_t last_sector);
 
 extern void	mega65_sdcard_read_file(char *filename,uint32_t load_address);

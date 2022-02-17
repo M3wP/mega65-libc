@@ -7,5 +7,7 @@
 
 extern void mega65_fast(void);
 extern void usleep(uint32_t micros);
+extern char cdecl mega65_dos_exechelper(char* filename);
+
 
 #endif

@@ -28,14 +28,16 @@ void mega65_sdcard_reset(void)
   //  write_line("Resetting SD card...",0);
 
   // Clear SDHC flag
-  POKE(sd_ctl,0x40);
+  //dengland Apparently no
+  //POKE(sd_ctl,0x40);
   
   POKE(sd_ctl,0);
   POKE(sd_ctl,1);
 
   // Now wait for SD card reset to complete
   while (PEEK(sd_ctl)&3) {
-    POKE(0xd020,(PEEK(0xd020)+1)&15);
+//  POKE(0xd020,(PEEK(0xd020)+1)&15);
+	POKE(0xD020, PEEK(0xD020));
   }
   
   if (sdhc_card) {
@@ -44,6 +46,12 @@ void mega65_sdcard_reset(void)
     POKE(sd_ctl,0x41);
   }
 }
+
+void mega65_sdcard_open(void)
+{
+  mega65_sdcard_reset();
+}
+
 
 // void mega65_fast(void)
 // {
@@ -146,12 +154,6 @@ uint32_t mega65_sdcard_getsize(void)
   return sector_number;
 }
 
-void mega65_sdcard_open(void)
-{
-  mega65_sdcard_reset();
-}
-
-
 uint32_t write_count=0;
 
 void mega65_sdcard_map_sector_buffer(void)
@@ -172,69 +174,78 @@ unsigned short timeout;
 
 uint8_t mega65_sdcard_readsector(const uint32_t sector_number)
 {
-  char tries=0;
-  
-  uint32_t sector_address=sector_number*512;
-  if (sdhc_card) sector_address=sector_number;
+  char tries = 0;
+
+  uint32_t sector_address = sector_number * 512;
+  if (sdhc_card)
+    sector_address = sector_number;
   else {
-    if (sector_number>=0x7fffff) {
+    if (sector_number >= 0x7fffff) {
       //      write_line("ERROR: Asking for sector @ >= 4GB on SDSC card.",0);
-      return -1;
+      while (1)
+        continue;
     }
   }
 
-  POKE(sd_addr+0,(sector_address>>0)&0xff);
-  POKE(sd_addr+1,(sector_address>>8)&0xff);
-  POKE(sd_addr+2,((uint32_t)sector_address>>16)&0xff);
-  POKE(sd_addr+3,((uint32_t)sector_address>>24)&0xff);
+  POKE(sd_addr + 0, (sector_address >> 0) & 0xff);
+  POKE(sd_addr + 1, (sector_address >> 8) & 0xff);
+  POKE(sd_addr + 2, ((uint32_t)sector_address >> 16) & 0xff);
+  POKE(sd_addr + 3, ((uint32_t)sector_address >> 24) & 0xff);
 
-  //  write_line("Reading sector @ $",0);
+  // write_line("Reading sector @ $",0);
   //  screen_hex(screen_line_address-80+18,sector_address);
-  
-  while(tries<10) {
+
+  while (tries < 10) {
 
     // Wait for SD card to be ready
-    timeout=50000U;
-    while (PEEK(sd_ctl)&0x3)
-      {
-	timeout--; if (!timeout) return -1;
-	if (PEEK(sd_ctl)&0x40)
-	  {
-	    return -1;
-	  }
-	// Sometimes we see this result, i.e., sdcard.vhdl thinks it is done,
-	// but sdcardio.vhdl thinks not. This means a read error
-	if (PEEK(sd_ctl)==0x01) return -1;
+    timeout = 50000U;
+    while (PEEK(sd_ctl) & 0x3) {
+      timeout--;
+      if (!timeout) {
+        // Time out -- so reset SD card
+        POKE(sd_ctl, 0);
+        POKE(sd_ctl, 1);
+        timeout = 50000U;
       }
-
-    // Command read
-    POKE(sd_ctl,2);
-    
-    // Wait for read to complete
-    timeout=50000U;
-    while (PEEK(sd_ctl)&0x3) {
-      timeout--; if (!timeout) return -1;
-	//      write_line("Waiting for read to complete",0);
-      if (PEEK(sd_ctl)&0x40)
-	{
-	  return -1;
-	}
+      if (PEEK(sd_ctl) & 0x40) {
+        return -1;
+      }
       // Sometimes we see this result, i.e., sdcard.vhdl thinks it is done,
       // but sdcardio.vhdl thinks not. This means a read error
-      if (PEEK(sd_ctl)==0x01) return -1;
+      if (PEEK(sd_ctl) == 0x01)
+        return -1;
     }
 
-      // Note result
+    // Command read
+    POKE(sd_ctl, 2);
+
+    // Wait for read to complete
+    timeout = 50000U;
+    while (PEEK(sd_ctl) & 0x3) {
+      timeout--;
+      if (!timeout)
+        return -1;
+      //      write_line("Waiting for read to complete",0);
+      if (PEEK(sd_ctl) & 0x40) {
+        return -1;
+      }
+      // Sometimes we see this result, i.e., sdcard.vhdl thinks it is done,
+      // but sdcardio.vhdl thinks not. This means a read error
+      if (PEEK(sd_ctl) == 0x01)
+        return -1; 
+    }
+
+    // Note result
     // result=PEEK(sd_ctl);
 
-    if (!(PEEK(sd_ctl)&0x67)) {
+    if (!(PEEK(sd_ctl) & 0x67)) {
       // Copy data from hardware sector buffer via DMA
-      lcopy(sd_sectorbuffer,(long)sector_buffer,512);
-  
-      return 0;
+      lcopy(sd_sectorbuffer, (long)sector_buffer, 512);
+
+      return -1;
     }
-    
-    POKE(0xd020,(PEEK(0xd020)+1)&0xf);
+
+//  POKE(0xd020, (PEEK(0xd020) + 1) & 0xf);
 
     // Reset SD card
     mega65_sdcard_open();
@@ -242,109 +253,120 @@ uint8_t mega65_sdcard_readsector(const uint32_t sector_number)
     tries++;
   }
 
-  return -1;
-  
+  return 0;
 }
 
 uint8_t verify_buffer[512];
 
-uint8_t mega65_sdcard_writesector(const uint32_t sector_number)
-{
-  // Copy buffer into the SD card buffer, and then execute the write job
+uint8_t mega65_sdcard_writesector(const uint32_t sector_number, uint8_t is_multi) {
+// Copy buffer into the SD card buffer, and then execute the write job
   uint32_t sector_address;
   int i;
-  char tries=0,result;
-  uint16_t counter=0;
-
-  while (PEEK(sd_ctl)&3) {
-    continue;
-  }
+  char tries = 0, result;
+  uint16_t counter = 0;
 
   // Set address to read/write
-  POKE(sd_ctl,1); // end reset
-  if (!sdhc_card) sector_address=sector_number*512;
-  else sector_address=sector_number;
-  POKE(sd_addr+0,(sector_address>>0)&0xff);
-  POKE(sd_addr+1,(sector_address>>8)&0xff);
-  POKE(sd_addr+2,(sector_address>>16)&0xff);
-  POKE(sd_addr+3,(sector_address>>24)&0xff);
+  POKE(sd_ctl, 1); // end reset
+  if (!sdhc_card)
+    sector_address = sector_number * 512;
+  else
+    sector_address = sector_number;
+  POKE(sd_addr + 0, (sector_address >> 0) & 0xff);
+  POKE(sd_addr + 1, (sector_address >> 8) & 0xff);
+  POKE(sd_addr + 2, (sector_address >> 16) & 0xff);
+  POKE(sd_addr + 3, (sector_address >> 24) & 0xff);
 
   // Read the sector and see if it already has the correct contents.
   // If so, nothing to write
 
-  POKE(sd_ctl,2); // read the sector we just wrote
+  POKE(sd_ctl, 2); // read the sector we just wrote
 
-  while (PEEK(sd_ctl)&3) {
-    continue;
+  counter = 0;
+  while (PEEK(sd_ctl) & 3) {
+//    POKE(0xD020, PEEK(0xD020) + 1);
+    counter++;
+    if (!counter) {
+      // SD card not becoming ready: try reset
+      POKE(sd_ctl, 0); // begin reset
+      usleep(500000);
+      POKE(sd_ctl, 1); // end reset
+      POKE(sd_ctl, 2);
+    }
   }
 
   // Copy the read data to a buffer for verification
-  lcopy(sd_sectorbuffer,(long)verify_buffer,512);
-  
+  lcopy(sd_sectorbuffer, (long)verify_buffer, 512);
+
   // VErify that it matches the data we wrote
-  for(i=0;i<512;i++) {
-    if (sector_buffer[i]!=verify_buffer[i]) break;
+  for (i = 0; i < 512; i++) {
+    if (sector_buffer[i] != verify_buffer[i])
+      break;
   }
-  if (i==512) {
+  if (i == 512) {
     return 0;
-  } 
-  
-  while(tries<10) {
+  }
+
+  while (tries < 10) {
 
     // Copy data to hardware sector buffer via DMA
-    lcopy((long)sector_buffer,sd_sectorbuffer,512);
-    
+    lcopy((long)sector_buffer, sd_sectorbuffer, 512);
+
     // Wait for SD card to be ready
-    counter=0;
-    while (PEEK(sd_ctl)&3)
-      {
-	counter++;
-	if (!counter) {
-
-	  // SD card not becoming ready: try reset
-	  POKE(sd_ctl,0); // begin reset
-	  usleep(500000);
-	  POKE(sd_ctl,1); // end reset
-	  POKE(sd_ctl,3); // retry write
-
-	}
-	// Show we are doing something
-	//	POKE(0x804f,1+(PEEK(0x804f)&0x7f));
+    counter = 0;
+    while (PEEK(sd_ctl) & 3) {
+      counter++;
+      if (!counter) {
+        // SD card not becoming ready: try reset
+        POKE(sd_ctl, 0); // begin reset
+        usleep(500000);
+        POKE(sd_ctl, 1);    // end reset
+        POKE(sd_ctl, 0x57); // Open SD card write gate
+        if (is_multi)
+          POKE(sd_ctl, 4);
+        else
+          POKE(sd_ctl, 3); // retry write
       }
+      // Show we are doing something
+      //	POKE(0x804f,1+(PEEK(0x804f)&0x7f));
+    }
 
     // Command write
-    POKE(sd_ctl,3);
+    POKE(sd_ctl, 0x57); // Open SD card write gate
+    if (is_multi)
+      POKE(sd_ctl, 4);
+    else
+      POKE(sd_ctl, 3);
 
-    while (!(PEEK(sd_ctl)&3)) continue;
-    
     // Wait for write to complete
-    counter=0;
-    while (PEEK(sd_ctl)&3)
-      {
-	counter++;
-	if (!counter) {
-	  
-	  // SD card not becoming ready: try reset
-	  POKE(sd_ctl,0); // begin reset
-	  usleep(500000);
-	  POKE(sd_ctl,1); // end reset
-	  POKE(sd_ctl,3); // retry write
-
-	}
-	// Show we are doing something
-	//	POKE(0x809f,1+(PEEK(0x809f)&0x7f));
+    counter = 0;
+    while (PEEK(sd_ctl) & 3) {
+      counter++;
+      if (!counter) {
+        // SD card not becoming ready: try reset
+        POKE(sd_ctl, 0); // begin reset
+        usleep(500000);
+        POKE(sd_ctl, 1); // end reset
+        // Retry write
+        POKE(sd_ctl, 0x57); // Open SD card write gate
+        if (is_multi)
+          POKE(sd_ctl, 4);
+        else
+          POKE(sd_ctl, 3);
       }
+      // Show we are doing something
+      //	POKE(0x809f,1+(PEEK(0x809f)&0x7f));
+    }
 
     write_count++;
-    POKE(0xD020,write_count&0x0f);
+//  POKE(0xD020, write_count & 0x0f);
 
     // Note result
-    result=PEEK(sd_ctl);
-    
-    if (!(PEEK(sd_ctl)&0x67)) {
+    result = PEEK(sd_ctl);
+
+    if (!(PEEK(sd_ctl) & 0x67)) {
       write_count++;
-      
-      POKE(0xD020,write_count&0x0f);
+
+//    POKE(0xD020, write_count & 0x0f);
 
       // There is a bug in the SD controller: You have to read between writes, or it
       // gets really upset.
@@ -353,50 +375,46 @@ uint8_t mega65_sdcard_writesector(const uint32_t sector_number)
 
       // Does it just need some time between accesses?
 
-      while (PEEK(sd_ctl)&3) {
-      	continue;
-      }
+      POKE(sd_ctl, 2); // read the sector we just wrote
 
-      POKE(sd_ctl,2); // read the sector we just wrote
-
-      while (!(PEEK(sd_ctl)&3)) {
-      	continue;
-      }
-
-      while (PEEK(sd_ctl)&3) {
-      	continue;
+      while (PEEK(sd_ctl) & 3) {
+        continue;
       }
 
       // Copy the read data to a buffer for verification
-      lcopy(sd_sectorbuffer,(long)verify_buffer,512);
+      lcopy(sd_sectorbuffer, (long)verify_buffer, 512);
 
       // VErify that it matches the data we wrote
-      for(i=0;i<512;i++) {
-	if (sector_buffer[i]!=verify_buffer[i]) break;
+      for (i = 0; i < 512; i++) {
+        if (sector_buffer[i] != verify_buffer[i])
+          break;
       }
-      if (i!=512) {
-	// VErify error has occurred
-	// write_line("Verify error for sector $$$$$$$$",0);
-	// screen_hex(screen_line_address-80+24,sector_number);
+      if (i != 512) {
+        // VErify error has occurred
+        //	write_line("Verify error for sector $$$$$$$$",0);
+        
+//!!!FIXME Errors from HAL
+//      screen_hex(screen_line_address - 80 + 24, sector_number);
+      
+
       }
       else {
-      //      write_line("Wrote sector $$$$$$$$, result=$$",2);      
-      //      screen_hex(screen_line_address-80+2+14,sector_number);
-      //      screen_hex(screen_line_address-80+2+30,result);
+        //      write_line("Wrote sector $$$$$$$$, result=$$",2);
+        //      screen_hex(screen_line_address-80+2+14,sector_number);
+        //      screen_hex(screen_line_address-80+2+30,result);
 
-	return 0;
+        return 0;
       }
     }
 
-    POKE(0xd020,(PEEK(0xd020)+1)&0xf);
-
+//    POKE(0xd020, (PEEK(0xd020) + 1) & 0xf);
   }
 
-  //  write_line("Write error @ $$$$$$$$$",2);      
-  // screen_hex(screen_line_address-80+2+16,sector_number);
+  //  write_line("Write error @ $$$$$$$$$",2);
+  //  screen_hex(screen_line_address-80+2+16,sector_number);
+
   return -1;
 }
-
 void mega65_sdcard_erase(const uint32_t first_sector,const uint32_t last_sector)
 {
   uint32_t n;

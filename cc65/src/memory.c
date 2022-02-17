@@ -21,7 +21,7 @@ void do_dma(void)
   POKE(0xd705U, ((unsigned int)&dmalist) & 0xff); // triggers enhanced DMA
 }
 
-unsigned char lpeek(long address)
+unsigned char lpeek(unsigned long address)
 {
   // Read the byte at <address> in 28-bit address space
   // XXX - Optimise out repeated setup etc
@@ -52,7 +52,7 @@ unsigned char lpeek(long address)
 
 unsigned char db1, db2, db3;
 
-unsigned char lpeek_debounced(long address)
+unsigned char lpeek_debounced(unsigned long address)
 {
   db1 = 0;
   db2 = 1;
@@ -65,7 +65,7 @@ unsigned char lpeek_debounced(long address)
   return db1;
 }
 
-void lpoke(long address, unsigned char value)
+void lpoke(unsigned long address, unsigned char value)
 {
 
   dmalist.option_0b = 0x0b;
@@ -90,7 +90,7 @@ void lpoke(long address, unsigned char value)
   return;
 }
 
-void lcopy(long source_address, long destination_address,
+void lcopy(unsigned long source_address, unsigned long destination_address,
            unsigned int count)
 {
   dmalist.option_0b = 0x0b;
@@ -123,7 +123,7 @@ void lcopy(long source_address, long destination_address,
   return;
 }
 
-void lfill(long destination_address, unsigned char value,
+void lfill(unsigned long destination_address, unsigned char value,
            unsigned int count)
 {
   dmalist.option_0b = 0x0b;
@@ -150,7 +150,7 @@ void lfill(long destination_address, unsigned char value,
   return;
 }
 
-void lfill_skip(long destination_address, unsigned char value,
+void lfill_skip(unsigned long destination_address, unsigned char value,
                 unsigned int count, unsigned char skip)
 {
   dmalist.option_0b = 0x0b;
